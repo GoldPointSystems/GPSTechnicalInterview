@@ -13,18 +13,43 @@
     </div>
     <ng-container>
       <ng-container>
-        <table mat-table>
+        <table mat-table [dataSource]="applications"> <!-- Get the applications array from the applications.component.ts file -->
           <ng-container matColumnDef="applicationNumber">
             <th mat-header-cell *matHeaderCellDef>Application Number</th>
+            <td mat-cell *matCellDef="let element">{{element.applicationNumber}}</td> <!-- Create a variable (element) that represents the row's data 
+             so basically let element = ApplicationNumber -->
           </ng-container>
           <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let element"> {{ element.loanTerms?.amount || 'N/A' }} </td>
           </ng-container>
           <ng-container matColumnDef="dateApplied">
             <th mat-header-cell *matHeaderCellDef>Date Applied</th>
+            <td mat-cell *matCellDef="let element"> {{ element.dateApplied | date: 'MM/dd/yyyy'}} </td> <!-- Specify the format of the date -->
           </ng-container>
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+          </ng-container>
+          <!-- Add the actions column. The three dots that allow for edit and deletion of the application -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let application">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon class="material-icons">more_vert</mat-icon> <!-- The three dots (pain to get it working) -->
+              </button>
+              
+            <!-- Populate the menu of the three dots -->
+              <mat-menu #menu="matMenu">
+                <!-- Add the correct methods that should be called once one of the options from the menus are clicked-->
+                <button mat-menu-item (click)="editApplication(application)">
+                  <mat-icon>Edit</mat-icon> 
+                </button>
+                <button mat-menu-item (click)="deleteApplication(application.applicationNumber)">
+                  <mat-icon>Delete</mat-icon>
+                </button>
+              </mat-menu>
+            </td>
           </ng-container>
           <tr class="table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-row"></tr>

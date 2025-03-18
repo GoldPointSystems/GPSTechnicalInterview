@@ -2,14 +2,14 @@
 <section class="application-details">
   <mat-card class="section-details">
     <mat-card-title class="section-details-title">Personal Information</mat-card-title>
-    <form [formGroup]="applicationForm" (ngSubmit) = "onSubmit()"> <!-- Add the function that creates the application-->
+    <form [formGroup]="applicationForm" (ngSubmit) = "onSubmit()"> <!-- Add the function that saves the edited application-->
       <section class="section-details-body">
         <div class="input-wrap-row">
           <div class="input-wrap">
             <mat-form-field appearance="outline" class="input-wrap__input">
               <mat-label>First Name </mat-label>
               <input matInput formControlName="firstName" placeholder="First Name *" required>
-              <mat-error *ngIf="applicationForm.get('firstName')?.invalid">  <!-- If the name is invalid (blank) then show the message-->
+              <mat-error *ngIf="applicationForm.get('firstName')?.invalid">
                 First Name is required.
               </mat-error>
             </mat-form-field>
@@ -63,7 +63,7 @@
             <mat-form-field appearance="outline" class="input-wrap__input">
               <mat-label>Amount</mat-label>
               <input matInput formControlName="amount" placeholder="Amount *" required>
-              <mat-error *ngIf="applicationForm.get('firstName')?.invalid"> <!-- *ng has a lot of methods that can be useful!!-->
+              <mat-error *ngIf="applicationForm.get('firstName')?.invalid">
                 invalid amount.
               </mat-error>
             </mat-form-field>
