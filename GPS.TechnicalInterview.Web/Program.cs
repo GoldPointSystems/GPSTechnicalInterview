@@ -20,6 +20,8 @@ namespace GPS.ApplicationManager.Web
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
+              // Changing from http://localhost:5000 to 5001. I am getting some CORS errors
+              webBuilder.UseUrls("https://localhost:5001");
               webBuilder.UseStartup<Startup>();
             });
   }

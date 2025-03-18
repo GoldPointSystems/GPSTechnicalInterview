@@ -10,13 +10,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material.module';
 import { ApplicationsComponent } from './applications/applications.component';
+import { EditApplicationComponent } from './edit-application/edit-application.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     ApplicationsComponent,
-    CreateApplicationComponent
+    CreateApplicationComponent,
+    EditApplicationComponent // Needed to add this!
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

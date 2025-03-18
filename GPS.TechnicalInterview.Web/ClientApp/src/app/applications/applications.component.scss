@@ -127,3 +127,13 @@
   padding-top: 0;
   padding-bottom: 0 !important;
 }
+
+mat-icon {
+  cursor: pointer;
+  // display: flex;
+  // justify-content: flex-end;
+}
+
+mat-menu {
+  min-width: 150px;
+}
