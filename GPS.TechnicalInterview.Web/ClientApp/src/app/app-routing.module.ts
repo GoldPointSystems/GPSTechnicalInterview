@@ -4,10 +4,12 @@ import { ApplicationsComponent } from './applications/applications.component';
 import { CreateApplicationComponent } from './create-application/create-application.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/applications', pathMatch: 'full' },
-  { path: 'applications', component: ApplicationsComponent },
-  { path: 'create-application', component: CreateApplicationComponent },
-  { path: '**', redirectTo: '/applications'},
+    { path: '', redirectTo: '/applications', pathMatch: 'full' },
+    { path: 'applications', component: ApplicationsComponent },
+    { path: 'create-application', component: CreateApplicationComponent },
+    { path: 'update-application/:id', component: CreateApplicationComponent },
+
+    { path: '**', redirectTo: '/applications' },
 ];
 
 @NgModule({
