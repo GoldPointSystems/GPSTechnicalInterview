@@ -2,9 +2,9 @@
 {
     public class LoanTerms
     {
-        public int Amount { get; set; }
-        public int MonthlyPayment { get; set; }
-        public string Terms { get; set; }
+        public double Amount { get; set; }
+        public double MonthlyPayment { get; set; }
+        public uint Terms { get; set; }
 
     }
 }
