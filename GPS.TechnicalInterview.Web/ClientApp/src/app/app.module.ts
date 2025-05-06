@@ -6,17 +6,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { CreateApplicationComponent } from './create-application/create-application.component';
+import { EditApplicationsComponent } from './edit-applictaions/edit-applictaions.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material.module';
 import { ApplicationsComponent } from './applications/applications.component';
+import { MatIconModule } from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     ApplicationsComponent,
-    CreateApplicationComponent
+    CreateApplicationComponent,
+    EditApplicationsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +31,9 @@ import { ApplicationsComponent } from './applications/applications.component';
     AppRoutingModule,
     NoopAnimationsModule,
     MaterialModule,
+    MatIconModule,
+    MatButtonModule, 
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

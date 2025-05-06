@@ -58,13 +58,7 @@
           <div class="input-wrap">
             <mat-form-field appearance="outline" class="input-wrap__input">
               <mat-label>Application Number</mat-label>
-              <input matInput formControlName="applicationNumber" placeholder="Application Number*">
-              @if (applicationForm.get('applicationNumber')?.hasError('required') && applicationForm.get('applicationNumber')?.touched) {
-                <mat-error>Application Number required.</mat-error>
-              }
-              @else if (applicationForm.get('applicationNumber')?.hasError('pattern') && applicationForm.get('applicationNumber')?.touched) {
-                <mat-error>Invalid Application Number.</mat-error>
-              }
+              <input matInput formControlName="applicationNumber" placeholder="Application Number*" readonly>
             </mat-form-field>
           </div>
           <div class="input-wrap">

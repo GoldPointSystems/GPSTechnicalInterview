@@ -1,16 +1,18 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { Router } from '@angular/router';
 import { LoanApplication, ApplicationStatus } from '../LoanApplication.model';
 import { ApiService } from '../api.service';
+import { DataService } from '../data.service';
 
 @Component({
-  selector: 'app-create-application',
-  templateUrl: './create-application.component.html',
-  styleUrls: ['./create-application.component.scss']
+  selector: 'edit-applications',
+  templateUrl: './edit-applictaions.component.html',
+  styleUrls: ['./edit-application.component.scss']
 })
-export class CreateApplicationComponent {
+
+export class EditApplicationsComponent implements OnInit {
   public applicationForm: FormGroup;
   public statuses: Array<string> = ['New', 'Approved', 'Funded'];
   private mpa?: string;
@@ -20,6 +22,8 @@ export class CreateApplicationComponent {
   private router = inject(Router);
   private apiService = inject(ApiService);
   private destroyRef = inject(DestroyRef);
+  private dataService = inject(DataService);
+  private applicationNumber = this.dataService.getApplicationNumber();
 
   constructor(private formBuilder: FormBuilder) {
     this.applicationForm = this.formBuilder.group({
@@ -33,10 +37,7 @@ export class CreateApplicationComponent {
         Validators.required,
         Validators.email
       ]],
-      applicationNumber: [null, [
-        Validators.required,
-        Validators.pattern(/^\d/)
-      ]],
+      applicationNumber: [null],
       status: ['New', Validators.required],
       amount: [null, [
         Validators.required,
@@ -91,7 +92,7 @@ export class CreateApplicationComponent {
         Status: ApplicationStatus[this.applicationForm.get('status')?.value as keyof typeof ApplicationStatus]
       }
 
-      const subscription = this.apiService.createApplication(applicationData).subscribe({
+      const subscription = this.apiService.editApplication(this.applicationNumber, applicationData).subscribe({
         error: (error: Error) => {
           this.error.set(error.message);
         },
@@ -99,7 +100,7 @@ export class CreateApplicationComponent {
         next: (message) => {
           //snackbar
           let sb = this.snackBar.open(message.message, 'OK', {duration: 3000});
-          if (message.message === "Created Successfully.") { 
+          if (message.message === "Updated Successfully.") { 
             sb.afterDismissed().subscribe(nav => {
               this.router.navigate(['/applications'])
           });}
@@ -114,5 +115,27 @@ export class CreateApplicationComponent {
       this.applicationForm.markAllAsTouched()
       this.snackBar.open('Please fill out all required fields.', 'OK', {duration: 5000});
     }
+  }
+
+  ngOnInit() {
+    const subscription = this.apiService.getApplicationById(this.applicationNumber).subscribe({
+      next: (data) => {
+        this.applicationForm.setValue({
+          firstName: data.personalInformation.name.first,
+          lastName: data.personalInformation.name.last,
+          phoneNumber: data.personalInformation.phoneNumber,
+          email: data.personalInformation.email,
+          applicationNumber: data.applicationNumber,
+          status: ApplicationStatus[data.status as keyof typeof ApplicationStatus],
+          amount: data.loanTerms.amount,
+          monthlyPayAmount: ((data.loanTerms.amount/data.loanTerms.terms).toFixed(2)) + "",
+          terms: data.loanTerms.terms
+        })
+      }
+    });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 }
