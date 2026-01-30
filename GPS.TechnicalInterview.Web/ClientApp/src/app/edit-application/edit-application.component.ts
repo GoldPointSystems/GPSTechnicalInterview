@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService, Application } from '../api.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-create-application',
-  templateUrl: './create-application.component.html',
-  styleUrls: ['./create-application.component.scss']
+  selector: 'app-edit-application',
+  templateUrl: './edit-application.component.html',
+  styleUrls: ['./edit-application.component.scss']
 })
-export class CreateApplicationComponent {
+export class EditApplicationComponent {
 
   newApplication: Application = {
     applicationNumber: '',
@@ -45,6 +46,7 @@ export class CreateApplicationComponent {
     , private router: Router
     , private apiService: ApiService
     , private snackBar: MatSnackBar
+    , private route: ActivatedRoute
   ) {
     this.applicationForm = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -59,10 +61,36 @@ export class CreateApplicationComponent {
     });
   }
 
+  loadApplication(applicationNumber: string): void {
+  this.apiService.getApplication(applicationNumber)
+    .subscribe(app => {
+      this.newApplication = app;
+
+      this.applicationForm.patchValue({
+        firstName: app.personalInformation.name.first,
+        lastName: app.personalInformation.name.last,
+        phoneNumber: app.personalInformation.phoneNumber,
+        email: app.personalInformation.email,
+        applicationNumber: app.applicationNumber,
+        status: this.statuses[app.status],
+        amount: app.loanTerms.amount,
+        terms: app.loanTerms.term,
+        monthlyPayAmount: app.loanTerms.monthlyPaymentAmount.toFixed(2)
+      });
+
+      this.applicationForm.get('applicationNumber')?.disable();
+    });
+}
+
+
    ngOnInit(): void {
     // Optionally, calculate monthly payment automatically if needed
     this.applicationForm.get('amount')?.valueChanges.subscribe(() => this.calculateMonthlyPayment());
     this.applicationForm.get('terms')?.valueChanges.subscribe(() => this.calculateMonthlyPayment());
+    const applicationNumber = this.route.snapshot.paramMap.get('applicationNumber');
+    if (applicationNumber) {
+      this.loadApplication(applicationNumber);
+    }
   }
 
   calculateMonthlyPayment(): void {
@@ -123,20 +151,21 @@ export class CreateApplicationComponent {
       status: this.newApplication.status = this.statusMap[this.applicationForm.get('status')?.value],
       dateApplied: new Date(),
     };
-    this.apiService.createApplication(this.newApplication).subscribe({
+    this.apiService.updateApplication(
+      this.newApplication.applicationNumber,
+      this.newApplication
+    ).subscribe({
       next: () => {
-        this.snackBar.open('Created successfully!', 'Ok', { 
-          duration: 4000, 
+        this.snackBar.open('Updated successfully!', 'Ok', {
+          duration: 4000,
           verticalPosition: 'top',
           panelClass: ['snackbar-success']
         });
-        
-        
         this.router.navigate(['/applications']);
       },
       error: err => {
-        console.error('Error creating application:', err);
-        alert('There was an error creating the application. Please try again.');
+        console.error('Update failed:', err);
+        this.snackBar.open('Update failed', 'Close', { duration: 4000 });
       }
     });
     
