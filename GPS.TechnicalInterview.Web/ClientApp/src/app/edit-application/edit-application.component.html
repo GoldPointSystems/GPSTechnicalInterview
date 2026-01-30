@@ -1,8 +1,10 @@
 <app-nav-menu></app-nav-menu>
 <section class="application-details">
     <mat-card class="section-details">
-        <mat-card-title class="section-details-title">Personal Information</mat-card-title>
-        <form [formGroup]="applicationForm" (ngSubmit)="createApplication()">
+        <mat-card-title class="section-details-title">
+            Personal Information
+        </mat-card-title>
+        <form [formGroup]="applicationForm" (ngSubmit)="editApplication()">
             <section class="section-details-body">
                 <div class="input-wrap-row">
                     <div class="input-wrap">
@@ -70,10 +72,7 @@
                             <input matInput formControlName="applicationNumber"
                                    class="form-control"
                                    [class.is-invalid]="applicationForm.get('applicationNumber')?.invalid && applicationForm.get('applicationNumber')?.touched"
-                                   placeholder="Application Number">
-                            <mat-error *ngIf="applicationForm.get('applicationNumber')?.hasError('required')">
-                                Application number is required
-                            </mat-error>
+                                   placeholder="Application Number" readonly>
                         </mat-form-field>
                     </div>
                     <div class="input-wrap">

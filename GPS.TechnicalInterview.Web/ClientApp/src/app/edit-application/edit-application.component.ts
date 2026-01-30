@@ -1,22 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-create-application',
-    templateUrl: './create-application.component.html',
-    styleUrls: ['./create-application.component.scss']
+    selector: 'app-edit-application',
+    templateUrl: './edit-application.component.html',
+    styleUrls: ['./edit-application.component.scss']
 })
-export class CreateApplicationComponent {
+export class EditApplicationComponent {
 
     public applicationForm: FormGroup;
     public statuses: Array<string> = ['New', 'Approved', 'Funded'];
+    public dateApplied: Date | null = null;
+
+
+    mapStatus(status: number): string {
+        return this.statuses[status] ?? 'New';
+    }
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
         private applicationService: ApiService,
+        private route: ActivatedRoute,
         private snackBar: MatSnackBar
     ) {
         this.applicationForm = this.formBuilder.group({
@@ -38,10 +45,33 @@ export class CreateApplicationComponent {
         termsCtrl?.valueChanges.subscribe(() => this.updatePayment());
     }
 
+    ngOnInit(): void {
+        const appNumber = this.route.snapshot.paramMap.get('appNumber');
 
+        this.applicationService.getApplication(appNumber).subscribe({
+            next: (app) => {
+                this.applicationForm.patchValue({
+                    firstName: app.personalInformation?.name?.first,
+                    lastName: app.personalInformation?.name?.last,
+                    phoneNumber: app.personalInformation?.phone,
+                    email: app.personalInformation?.email,
+                    applicationNumber: app.applicationNumber,
+                    status: this.mapStatus(app.status),
+                    amount: app.loanTerms?.amount,
+                    monthlyPayAmount: app.loanTerms?.monthlyPaymentAmount,
+                    terms: app.loanTerms?.term
+                });
 
-    createApplication() {
+                this.dateApplied = app.dateApplied;
 
+            },
+            error: (err) => {
+                console.error('API error:', err);
+            }
+        });
+    }
+
+    editApplication() {
         if (this.applicationForm.invalid) {
             this.applicationForm.markAllAsTouched();
             return;
@@ -65,16 +95,15 @@ export class CreateApplicationComponent {
                 Phone: form.phoneNumber,
                 Email: form.email
             },
-            DateApplied: new Date().toISOString(),
-            Status: this.statuses.indexOf(form.status)
+            Status: this.statuses.indexOf(form.status),
+            DateApplied: this.dateApplied
 
         };
 
-
-        this.applicationService.createApplication(payload).subscribe({
+        this.applicationService.editApplication(payload).subscribe({
             next: (response) => {
 
-                this.snackBar.open('Application saved successfully!', 'Close', {
+                this.snackBar.open('Application edited successfully!', 'Close', {
                     duration: 3000,
                     horizontalPosition: 'center',
                     verticalPosition: 'bottom'
