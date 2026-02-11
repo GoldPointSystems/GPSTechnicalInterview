@@ -6,7 +6,15 @@ header {
     height: 56px;
   
     .left-container {
+      display: flex;
+      align-items: center;
       margin-left: 1rem;
+
+      .back-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
       .title {
         font-size: 20px;
         margin-left: 1.5rem;

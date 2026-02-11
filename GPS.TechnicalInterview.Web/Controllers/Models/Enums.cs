@@ -1,5 +1,8 @@
-﻿namespace GPS.ApplicationManager.Web.Controllers.Models
+﻿using System.Text.Json.Serialization;
+
+namespace GPS.ApplicationManager.Web.Controllers.Models
 {
+  [JsonConverter(typeof(JsonStringEnumConverter))]
   public enum ApplicationStatus
   {
     New = 0,
