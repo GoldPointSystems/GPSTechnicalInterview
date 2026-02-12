@@ -1,6 +1,6 @@
 ﻿namespace GPS.ApplicationManager.Web.Controllers.Models
 {
-  public enum ApplicationStatus
+  public enum ApplicationStatusEnum
   {
     New = 0,
     Approved = 1,
