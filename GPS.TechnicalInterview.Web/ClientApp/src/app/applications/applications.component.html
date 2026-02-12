@@ -12,24 +12,47 @@
       </div>
     </div>
     <ng-container>
-      <ng-container>
-        <table mat-table>
-          <ng-container matColumnDef="applicationNumber">
-            <th mat-header-cell *matHeaderCellDef>Application Number</th>
-          </ng-container>
-          <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef>Amount</th>
-          </ng-container>
-          <ng-container matColumnDef="dateApplied">
-            <th mat-header-cell *matHeaderCellDef>Date Applied</th>
-          </ng-container>
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-          </ng-container>
-          <tr class="table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-row"></tr>
-        </table>
-      </ng-container>
+        <ng-container>
+            <table mat-table [dataSource]="tableData">
+                <ng-container matColumnDef="applicationNumber">
+                    <th mat-header-cell *matHeaderCellDef>Application Number</th>
+                    <td mat-cell *matCellDef="let row">{{ row.applicationNumber }}</td>
+                </ng-container>
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let row">{{ row.loanTerms.amount | currency }}</td>
+                </ng-container>
+                <ng-container matColumnDef="dateApplied">
+                    <th mat-header-cell *matHeaderCellDef>Date Applied</th>
+                    <td mat-cell *matCellDef="let row">{{ row.dateApplied | date: 'shortDate' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let row">{{ ApplicationStatusEnum[row.applicationStatus] }}</td>
+                </ng-container>
+                <ng-container class="mat-column-actions" matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="editApplication(row.applicationNumber)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteApplication(row)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+                <tr class="table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-row"></tr>
+            </table>
+        </ng-container>
     </ng-container>
   </div>
   <div class="add-btn-container">

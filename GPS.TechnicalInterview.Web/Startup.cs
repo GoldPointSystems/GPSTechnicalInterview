@@ -53,7 +53,7 @@ namespace GPS.ApplicationManager.Web
 
       app.UseEndpoints(endpoints =>
       {
-        endpoints.MapControllerRoute(
+          endpoints.MapControllerRoute(
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");
       });
