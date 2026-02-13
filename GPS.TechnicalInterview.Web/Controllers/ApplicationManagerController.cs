@@ -99,5 +99,20 @@ namespace GPS.ApplicationManager.Web.Controllers
       await System.IO.File.WriteAllTextAsync(_filePath, json);
       return Ok(new { message = "Updated Successfully." });
     }
+    [HttpDelete("[action]/{applicationNumber}")]
+    public async Task<IActionResult> DeleteApplication(string applicationNumber) // This method deletes a specific loan application based on the provided application number.
+    {
+      var applications = await GetApplicationsFromFileAsync();
+      var index = applications.FindIndex(app => app.ApplicationNumber == applicationNumber);
+      if (index == -1)
+      {
+        return NotFound(new { message = "Application not found." });
+      }
+
+      applications.RemoveAt(index);
+      var json = JsonSerializer.Serialize(applications);
+      await System.IO.File.WriteAllTextAsync(_filePath, json);
+      return Ok(new { message = "Deleted Successfully." });
+    }
   }
 }
