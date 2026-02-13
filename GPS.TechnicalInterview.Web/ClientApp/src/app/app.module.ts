@@ -10,13 +10,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material.module';
 import { ApplicationsComponent } from './applications/applications.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { EditApplicationComponent } from './edit-application/edit-application.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     ApplicationsComponent,
-    CreateApplicationComponent
+    CreateApplicationComponent,
+    EditApplicationComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +32,8 @@ import { ApplicationsComponent } from './applications/applications.component';
     AppRoutingModule,
     NoopAnimationsModule,
     MaterialModule,
+    MatMenuModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

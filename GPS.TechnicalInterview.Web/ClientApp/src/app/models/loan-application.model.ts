@@ -3,9 +3,9 @@ import { PersonalInformation } from "./personal-infomation.model";
 import { LoanApplicationStatus } from "./loan-application-status";
 
 export interface LoanApplication {
-    id: string;
+    applicationNumber: string;
     loanTerms: LoanTerms;
     personalInformation: PersonalInformation;
-    dateTime: string;
+    dateApplied: string; // DateTime from backend serialized as string
     status: LoanApplicationStatus;
 }

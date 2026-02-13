@@ -1,10 +1,8 @@
 export interface PersonalInformation {
-    name: Name;
+    name: {
+        first: string;
+        last: string;
+    };
     email: string;
     phoneNumber: string;
-}
-
-export interface Name {
-    firstName: string;
-    lastName: string;
 }
