@@ -17,6 +17,10 @@ export class NavMenuComponent implements OnInit {
     this.currentRoute = this.router.url;
     if (this.currentRoute === '/create-application') {
       this.headerTitle = 'Create Application';
+    } 
+    else if (this.currentRoute.startsWith('/edit-application')) {
+      const id = this.currentRoute.split('/edit-application/')[1];
+      this.headerTitle = `Application ${id}`;
     } else {
       this.headerTitle = 'Application Manager';
     }

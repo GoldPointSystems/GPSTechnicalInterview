@@ -5,12 +5,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
-  exports: [
-      MatCardModule, MatFormFieldModule, MatTableModule, 
-      MatSelectModule, MatInputModule, MatButtonModule,
+    exports: [
+        MatCardModule, MatFormFieldModule, MatTableModule,
+        MatSelectModule, MatInputModule, MatButtonModule,
+        MatDialogModule, MatSnackBarModule,
     ],
 })
 export class MaterialModule {}

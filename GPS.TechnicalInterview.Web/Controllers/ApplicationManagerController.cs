@@ -52,6 +52,67 @@ namespace GPS.ApplicationManager.Web.Controllers
       return Ok(new { message = "Created Successfully." });
     }
 
-    // TODO: Add your CRUD (Read, Update, Delete) methods here:
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetApplications() // This method retrieves all loan applications from the JSON file and returns them as a response.
+    {
+      var applications = await GetApplicationsFromFileAsync();
+      return Ok(applications);
+    }
+
+    [HttpGet("[action]/{applicationNumber}")]
+    public async Task<IActionResult> GetApplicationByNumber(string applicationNumber) // This method retrieves a specific loan application based on the provided application number. 
+    {
+      var applications = await GetApplicationsFromFileAsync();
+      var application = applications.Find(app => app.ApplicationNumber == applicationNumber);
+      if (application == null)
+      {
+        return NotFound(new { message = "Application not found." });
+      }
+      return Ok(application);
+    }
+
+    [HttpPut("[action]/{applicationNumber}")]
+    public async Task<IActionResult> UpdateApplication(string applicationNumber, [FromBody] LoanApplication updatedApplication) // This method updates an existing loan application based on the provided application number and the updated application data.
+    {
+      if (updatedApplication == null ||
+          string.IsNullOrEmpty(updatedApplication.PersonalInformation.Name.First) ||
+          string.IsNullOrEmpty(updatedApplication.PersonalInformation.Name.Last) ||
+          string.IsNullOrEmpty(updatedApplication.PersonalInformation.PhoneNumber) ||
+          string.IsNullOrEmpty(updatedApplication.PersonalInformation.Email) ||
+          updatedApplication.LoanTerms.Amount <= 0)
+      {
+        return BadRequest("Invalid application data. All fields are required and must be valid.");
+      }
+
+      var applications = await GetApplicationsFromFileAsync();
+      var index = applications.FindIndex(app => app.ApplicationNumber == applicationNumber);
+      if (index == -1)
+      {
+        return NotFound(new { message = "Application not found." });
+      }
+
+      updatedApplication.ApplicationNumber = applicationNumber; // Ensure the application number remains unchanged
+      updatedApplication.DateApplied = applications[index].DateApplied; // Preserve original date applied
+      applications[index] = updatedApplication;
+
+      var json = JsonSerializer.Serialize(applications);
+      await System.IO.File.WriteAllTextAsync(_filePath, json);
+      return Ok(new { message = "Updated Successfully." });
+    }
+    [HttpDelete("[action]/{applicationNumber}")]
+    public async Task<IActionResult> DeleteApplication(string applicationNumber) // This method deletes a specific loan application based on the provided application number.
+    {
+      var applications = await GetApplicationsFromFileAsync();
+      var index = applications.FindIndex(app => app.ApplicationNumber == applicationNumber);
+      if (index == -1)
+      {
+        return NotFound(new { message = "Application not found." });
+      }
+
+      applications.RemoveAt(index);
+      var json = JsonSerializer.Serialize(applications);
+      await System.IO.File.WriteAllTextAsync(_filePath, json);
+      return Ok(new { message = "Deleted Successfully." });
+    }
   }
 }
