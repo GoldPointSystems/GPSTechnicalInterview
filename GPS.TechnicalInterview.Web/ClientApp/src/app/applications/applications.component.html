@@ -13,18 +13,34 @@
     </div>
     <ng-container>
       <ng-container>
-        <table mat-table>
+        <table mat-table [dataSource]="applications">
           <ng-container matColumnDef="applicationNumber">
             <th mat-header-cell *matHeaderCellDef>Application Number</th>
+            <td mat-cell *matCellDef="let row">{{ row.applicationNumber }}</td>
           </ng-container>
           <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let row">{{ row.loanTerms?.amount | currency }}</td>
           </ng-container>
           <ng-container matColumnDef="dateApplied">
             <th mat-header-cell *matHeaderCellDef>Date Applied</th>
+            <td mat-cell *matCellDef="let row">{{ row.dateApplied | date:'shortDate' }}</td>
           </ng-container>
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #actionMenu="matMenu">
+                <button mat-menu-item (click)="editApplication(row.applicationNumber)">Edit</button>
+                <button mat-menu-item (click)="deleteApplication(row.applicationNumber)">Delete</button>
+              </mat-menu>
+            </td>
           </ng-container>
           <tr class="table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-row"></tr>
