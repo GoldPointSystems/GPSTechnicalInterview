@@ -1,0 +1,20 @@
+<!-- Dialog title pulled dynamically from parent -->
+<h2 mat-dialog-title class="title">{{ data.title }}</h2>
+
+<!-- Main message content -->
+<div mat-dialog-content class="content">
+  <p>{{ data.message }}</p>
+</div>
+
+<!-- Action buttons aligned to the right (matches Figma layout) -->
+<div mat-dialog-actions align="end" class="actions">
+  <!-- Cancel button -->
+  <button mat-button (click)="cancel()">
+    {{ data.cancelText || "CANCEL" }}
+  </button>
+
+  <!-- Confirm button -->
+  <button mat-button color="primary" (click)="confirm()">
+    {{ data.confirmText || "CONFIRM" }}
+  </button>
+</div>

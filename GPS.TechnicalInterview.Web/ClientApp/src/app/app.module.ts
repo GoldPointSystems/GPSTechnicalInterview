@@ -10,13 +10,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material.module';
 import { ApplicationsComponent } from './applications/applications.component';
+import { MatDialogModule } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.component";
+
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     ApplicationsComponent,
-    CreateApplicationComponent
+    CreateApplicationComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +30,7 @@ import { ApplicationsComponent } from './applications/applications.component';
     AppRoutingModule,
     NoopAnimationsModule,
     MaterialModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

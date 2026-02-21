@@ -78,7 +78,10 @@
       <hr />
     </form>
     <mat-card-actions class="details-buttons">
-      <button mat-button color="primary">SAVE</button>
+      <div *ngIf="error" style="margin-bottom: 8px;">{{ error }}</div>
+      <button mat-button color="primary" (click)="onSave()" [disabled]="isSaving || isLoading">
+        {{ isEditMode ? (isSaving ? 'UPDATING...' : 'UPDATE') : (isSaving ? 'SAVING...' : 'SAVE') }}
+      </button>
     </mat-card-actions>
 </mat-card>
 </section>
